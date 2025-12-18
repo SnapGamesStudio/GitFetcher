@@ -1,0 +1,69 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxykuowf6od8f"]
+
+[ext_resource type="Script" uid="uid://cubuii8hxb5di" path="res://addons/GitFetcher/GitFetcher.gd" id="1_d002f"]
+
+[node name="GitFetcher" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_d002f")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FileList" type="ItemList" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 20.0
+
+[node name="RefreshButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Refresh"
+
+[node name="DownloadButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+disabled = true
+text = "Download"
+
+[node name="DownloadAllButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+disabled = true
+text = "Download All"
+
+[node name="RepoDetails" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Owner" type="LineEdit" parent="VBoxContainer/RepoDetails"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Owner EX \"SnapGamesStudio\""
+alignment = 1
+expand_to_text_length = true
+
+[node name="Repo" type="LineEdit" parent="VBoxContainer/RepoDetails"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Repo EX \"Gallery\""
+alignment = 1
+
+[node name="Branch" type="LineEdit" parent="VBoxContainer/RepoDetails"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "main"
+placeholder_text = "Branch \"main\""
+alignment = 1
+
+[node name="Error" type="Label" parent="VBoxContainer"]
+layout_mode = 2
