@@ -2,8 +2,8 @@
 extends Control
 
 # --- GitHub repo settings ---
-var OWNER := "SnapGamesStudio"
-var REPO := "Gallery"
+var OWNER := ""
+var REPO := ""
 var BRANCH := "main"
 const TREE_URL := "https://api.github.com/repos/%s/%s/git/trees/%s?recursive=1"
 
@@ -20,7 +20,8 @@ var editor_interface: EditorInterface
 @onready var branch_edit: LineEdit = $VBoxContainer/RepoDetails/Branch
 @onready var repo_edit: LineEdit = $VBoxContainer/RepoDetails/Repo
 @onready var file_list: ItemList = $VBoxContainer/FileList
-@onready var refresh_button: Button = $VBoxContainer/RefreshButton
+@onready var clear_button: Button = $VBoxContainer/HBoxContainer/ClearButton
+@onready var refresh_button: Button = $VBoxContainer/HBoxContainer/RefreshButton
 @onready var download_button: Button = $VBoxContainer/DownloadButton
 @onready var download_all_button: Button = $VBoxContainer/DownloadAllButton
 
@@ -48,6 +49,7 @@ func _ready():
 	add_child(http)
 	http.request_completed.connect(_on_request_completed)
 	
+	clear_button.pressed.connect(_clear_file_list)
 	refresh_button.pressed.connect(_refresh_file_list)
 	download_button.pressed.connect(_download_selected_files)
 	download_all_button.pressed.connect(_download_all_files)
@@ -55,6 +57,10 @@ func _ready():
 	download_button.disabled = true
 	download_all_button.disabled = true
 
+func _clear_file_list():
+	all_files.clear()
+	file_list.clear()
+	
 # --- Step 1: Refresh repo tree ---
 func _refresh_file_list():
 	all_files.clear()
