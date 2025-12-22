@@ -10,6 +10,50 @@ In the last section its already filled out with "main"; this is the branch of th
 
 ![Gitfetcher example 1](https://github.com/user-attachments/assets/e56dce48-2c41-42ba-b0ff-4c0c4da62dd4)
 
+# How to access "Private Repos"
+
+<ins> **Step 1:** Create a GitHub Token </ins>
+
+1. Go to GitHub.com
+2. Click your profile picture → Settings
+3. Open Developer settings
+4. Click Personal access tokens
+   - Choose Fine-grained tokens (recommended)
+   - Or Tokens (classic)
+  
+<ins> **Step 2:** Configure Token Permissions </ins>
+
+Fine-grained token (recommended)
+
+   - Repository access → Only select repositories (or all)
+   - Permissions:
+
+      - Contents → Read-only
+
+Classic token
+
+   - Enable:
+      ☑ repo
+
+<ins> **Step 3:** Copy the Token </ins>
+
+- Click Generate token
+
+- Copy it immediately
+   ⚠ GitHub will not show it again
+
+<ins> **Step 4:** Paste the Token into the Addon </ins>
+
+- Open your project in Godot
+
+- Enable the addon (if not already enabled)
+
+- Open the addon dock
+
+- Paste the token into the GitHub Token field
+
+- The token is saved automatically in Editor Settings (Local)
+     
 # How To Use?
 
 1. Download the latest release build. 
