@@ -6,9 +6,14 @@ Perfect when you reuse old files from past projects, you can just download them 
 # How To Format?
 In the Owner section, write the repo's owner, for example, "SnapGamesStudio
 In the Repo, write the repo's name, for example, "Gallery"
-In the last section its already filled out with "main"; this is the branch of the repo you are going to download
+In the last section, it's already filled out with "main"; this is the branch of the repo you are going to download
 
 ![Gitfetcher example 1](https://github.com/user-attachments/assets/e56dce48-2c41-42ba-b0ff-4c0c4da62dd4)
+
+Or paste the URL for the GitHub repo 
+
+<img width="700" height="149" alt="image" src="https://github.com/user-attachments/assets/e8540afe-4aad-41ab-a1fa-4030745c6134" />
+
 
 # How to access "Private Repos"
 
