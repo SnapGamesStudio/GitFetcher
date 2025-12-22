@@ -20,6 +20,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="TokenButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Token"
+
+[node name="Token" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
+editor_description = "add a Github token to access your private Github repos"
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Github Token"
+alignment = 1
+
 [node name="FileList" type="ItemList" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
