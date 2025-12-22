@@ -34,6 +34,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Github Token"
 alignment = 1
+clear_button_enabled = true
 
 [node name="FileList" type="ItemList" parent="VBoxContainer"]
 layout_mode = 2
@@ -69,6 +70,12 @@ size_flags_vertical = 3
 disabled = true
 text = "Download All"
 
+[node name="URL" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Repo Url (Optional)"
+alignment = 1
+clear_button_enabled = true
+
 [node name="RepoDetails" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 alignment = 1
@@ -78,12 +85,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Owner EX \"SnapGamesStudio\""
 alignment = 1
+clear_button_enabled = true
 
 [node name="Repo" type="LineEdit" parent="VBoxContainer/RepoDetails"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Repo EX \"Gallery\""
 alignment = 1
+clear_button_enabled = true
 
 [node name="Branch" type="LineEdit" parent="VBoxContainer/RepoDetails"]
 layout_mode = 2
@@ -91,6 +100,9 @@ size_flags_horizontal = 3
 text = "main"
 placeholder_text = "Branch \"main\""
 alignment = 1
+clear_button_enabled = true
 
 [node name="Error" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+
+[connection signal="text_changed" from="VBoxContainer/URL" to="." method="_on_repo_url_pasted"]

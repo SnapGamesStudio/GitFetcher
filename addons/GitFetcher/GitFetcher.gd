@@ -78,7 +78,64 @@ func _ready() -> void:
 func _clear_file_list() -> void:
 	all_files.clear()
 	file_list.clear()
+
+func _parse_github_url(url: String) -> Dictionary:
+	var result := {
+		"owner": "",
+		"repo": "",
+		"branch": "main"
+	}
 	
+	url = url.strip_edges()
+	
+	# Remove protocol
+	if url.begins_with("https://"):
+		url = url.substr(8)
+	elif url.begins_with("http://"):
+		url = url.substr(7)
+	
+	# Remove domain
+	if url.begins_with("github.com/"):
+		url = url.substr(11)
+	
+	# Remove trailing .git
+	if url.ends_with(".git"):
+		url = url.substr(0, url.length() - 4)
+	
+	var parts := url.split("/", false)
+	
+	if parts.size() < 2:
+		return result
+	
+	result.owner = parts[0]
+	result.repo = parts[1]
+	
+	# Detect branch
+	if parts.size() >= 4:
+		if parts[2] == "tree" or parts[2] == "blob":
+			result.branch = parts[3]
+	
+	return result
+
+func _on_repo_url_pasted(text: String):
+		
+	var info = _parse_github_url(text)
+	
+	if text == "":
+		error_label.text = ""
+		return 
+	if info.owner == "" or info.repo == "":
+		error_label.text = "Invalid GitHub URL"
+		return
+	else:
+		error_label.text = ""
+	
+	
+	owner_edit.text = info.owner
+	repo_edit.text = info.repo
+	branch_edit.text = info.branch
+
+
 # --- Step 1: Refresh repo tree ---
 func _refresh_file_list() -> void:
 	all_files.clear()
