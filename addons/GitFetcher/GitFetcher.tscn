@@ -7,12 +7,13 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -1127.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("1_d002f")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,14 +21,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="TokenButton" type="CheckButton" parent="VBoxContainer/HBoxContainer2"]
+[node name="TokenButton" type="CheckButton" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 text = "Token"
 
-[node name="Token" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
+[node name="Token" type="LineEdit" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
 editor_description = "add a Github token to access your private Github repos"
 visible = false
 layout_mode = 2
@@ -36,65 +42,65 @@ placeholder_text = "Github Token"
 alignment = 1
 clear_button_enabled = true
 
-[node name="FileList" type="ItemList" parent="VBoxContainer"]
+[node name="FileList" type="ItemList" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 20.0
 select_mode = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="RefreshButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="RefreshButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Refresh"
 
-[node name="ClearButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="ClearButton" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Clear"
 
-[node name="DownloadButton" type="Button" parent="VBoxContainer"]
+[node name="DownloadButton" type="Button" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 disabled = true
 text = "Download"
 
-[node name="DownloadAllButton" type="Button" parent="VBoxContainer"]
+[node name="DownloadAllButton" type="Button" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 disabled = true
 text = "Download All"
 
-[node name="URL" type="LineEdit" parent="VBoxContainer"]
+[node name="URL" type="LineEdit" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 placeholder_text = "Repo Url (Optional)"
 alignment = 1
 clear_button_enabled = true
 
-[node name="RepoDetails" type="HBoxContainer" parent="VBoxContainer"]
+[node name="RepoDetails" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Owner" type="LineEdit" parent="VBoxContainer/RepoDetails"]
+[node name="Owner" type="LineEdit" parent="ScrollContainer/VBoxContainer/RepoDetails"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Owner EX \"SnapGamesStudio\""
 alignment = 1
 clear_button_enabled = true
 
-[node name="Repo" type="LineEdit" parent="VBoxContainer/RepoDetails"]
+[node name="Repo" type="LineEdit" parent="ScrollContainer/VBoxContainer/RepoDetails"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Repo EX \"Gallery\""
 alignment = 1
 clear_button_enabled = true
 
-[node name="Branch" type="LineEdit" parent="VBoxContainer/RepoDetails"]
+[node name="Branch" type="LineEdit" parent="ScrollContainer/VBoxContainer/RepoDetails"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "main"
@@ -102,7 +108,7 @@ placeholder_text = "Branch \"main\""
 alignment = 1
 clear_button_enabled = true
 
-[node name="Error" type="Label" parent="VBoxContainer"]
+[node name="Error" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 
-[connection signal="text_changed" from="VBoxContainer/URL" to="." method="_on_repo_url_pasted"]
+[connection signal="text_changed" from="ScrollContainer/VBoxContainer/URL" to="." method="_on_repo_url_pasted"]

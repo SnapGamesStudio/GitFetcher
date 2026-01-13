@@ -18,17 +18,17 @@ var settings: EditorSettings
 
 
 # --- UI elements (set up in scene) ---
-@onready var error_label: Label = $VBoxContainer/Error
-@onready var owner_edit: LineEdit = $VBoxContainer/RepoDetails/Owner
-@onready var branch_edit: LineEdit = $VBoxContainer/RepoDetails/Branch
-@onready var repo_edit: LineEdit = $VBoxContainer/RepoDetails/Repo
-@onready var token_edit: LineEdit = $VBoxContainer/HBoxContainer2/Token
-@onready var file_list: ItemList = $VBoxContainer/FileList
-@onready var clear_button: Button = $VBoxContainer/HBoxContainer/ClearButton
-@onready var refresh_button: Button = $VBoxContainer/HBoxContainer/RefreshButton
-@onready var download_button: Button = $VBoxContainer/DownloadButton
-@onready var download_all_button: Button = $VBoxContainer/DownloadAllButton
-@onready var token_button: CheckButton = $VBoxContainer/HBoxContainer2/TokenButton 
+@onready var error_label: Label = $ScrollContainer/VBoxContainer/Error
+@onready var owner_edit: LineEdit = $ScrollContainer/VBoxContainer/RepoDetails/Owner
+@onready var branch_edit: LineEdit = $ScrollContainer/VBoxContainer/RepoDetails/Branch
+@onready var repo_edit: LineEdit = $ScrollContainer/VBoxContainer/RepoDetails/Repo
+@onready var token_edit: LineEdit = $ScrollContainer/VBoxContainer/HBoxContainer2/Token
+@onready var file_list: ItemList = $ScrollContainer/VBoxContainer/FileList
+@onready var clear_button: Button = $ScrollContainer/VBoxContainer/HBoxContainer/ClearButton
+@onready var refresh_button: Button = $ScrollContainer/VBoxContainer/HBoxContainer/RefreshButton
+@onready var download_button: Button = $ScrollContainer/VBoxContainer/DownloadButton
+@onready var download_all_button: Button = $ScrollContainer/VBoxContainer/DownloadAllButton
+@onready var token_button: CheckButton = $ScrollContainer/VBoxContainer/HBoxContainer2/TokenButton 
 
 func set_editor_interface(ei: EditorInterface) -> void:
 	editor_interface = ei
@@ -42,12 +42,15 @@ func token_changed(new_token:String) -> void:
 	
 func owner_changed(new_owner:String) -> void:
 	OWNER = new_owner
+	print(new_owner)
 	
 func branch_changed(new_branch:String) -> void:
 	BRANCH = new_branch
+	print(new_branch)
 	
 func repo_changed(new_repo:String) -> void:
 	REPO = new_repo
+	print(new_repo)
 	
 func _ready() -> void:
 	if not Engine.is_editor_hint():
@@ -132,8 +135,11 @@ func _on_repo_url_pasted(text: String):
 	
 	
 	owner_edit.text = info.owner
+	owner_edit.text_changed.emit(info.owner)
 	repo_edit.text = info.repo
+	repo_edit.text_changed.emit(info.repo)
 	branch_edit.text = info.branch
+	branch_edit.text_changed.emit(info.branch)
 
 
 # --- Step 1: Refresh repo tree ---
