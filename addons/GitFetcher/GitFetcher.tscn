@@ -117,10 +117,6 @@ placeholder_text = "Branch \"main\""
 alignment = 1
 clear_button_enabled = true
 
-[node name="Error" type="Label" parent="ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-
 [node name="PreviewContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -145,5 +141,9 @@ layout_mode = 2
 size_flags_vertical = 6
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Error" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
 
 [connection signal="text_changed" from="ScrollContainer/VBoxContainer/URL" to="." method="_on_repo_url_pasted"]

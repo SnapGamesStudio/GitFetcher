@@ -102,7 +102,6 @@ func _on_search_changed(text: String) -> void:
 		if query == "" or query in path.to_lower():
 			file_list.add_item(path, _get_icon_for_file(path))
 
-	
 func file_selected(index: int):
 	error_label.text = ""
 	preview_label.visible = false
@@ -118,7 +117,6 @@ func file_selected(index: int):
 		if ext in ["png","jpg","jpeg","webp","ttf","otf"]:
 			var url = "https://raw.githubusercontent.com/%s/%s/%s/%s" % [OWNER, REPO, BRANCH, path]
 			preview_http.request(url)
-
 
 func _on_preview_downloaded(result, code, headers, body):
 	
@@ -279,15 +277,21 @@ func _parse_tree(json_text: String) -> void:
 			var path: String = item["path"]
 			
 			if path.ends_with(".import"):
-					continue
+				continue
 			elif path.ends_with(".uid"):
 				continue
 			elif path.ends_with("project.godot"):
 				continue
 				
 			all_files.append(path)
-			#file_list.add_item(path,_get_icon_for_file(path))
+
 	_on_search_changed(search_box.text)
+
+	print("Files found:", all_files.size())
+
+	download_button.disabled = all_files.is_empty()
+	download_all_button.disabled = all_files.is_empty()
+
 	
 func _get_icon_for_file(path:String) -> Texture2D:
 	var ext = path.get_extension().to_lower()
@@ -299,11 +303,6 @@ func _get_icon_for_file(path:String) -> Texture2D:
 		return get_theme_icon("FontFile", "EditorIcons")
 
 	return get_theme_icon("File", "EditorIcons")
-	
-	print("Files found:", all_files)
-	
-	download_button.disabled = all_files.is_empty()
-	download_all_button.disabled = all_files.is_empty()
 
 # --- Step 4: Download selected files ---
 func _download_selected_files() -> void:
@@ -313,8 +312,9 @@ func _download_selected_files() -> void:
 		return
 	
 	files_to_download.clear()
+	
 	for i in selected_indices:
-		files_to_download.append(all_files[i])
+		files_to_download.append(file_list.get_item_text(i))
 	
 	current_index = 0
 	_download_next()
