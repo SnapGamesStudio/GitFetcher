@@ -7,7 +7,7 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1127.0
+offset_right = -663.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -42,11 +42,20 @@ placeholder_text = "Github Token"
 alignment = 1
 clear_button_enabled = true
 
+[node name="Preview" type="CheckButton" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Preview"
+
+[node name="SearchBar" type="LineEdit" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Search..."
+alignment = 1
+clear_button_enabled = true
+
 [node name="FileList" type="ItemList" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 20.0
-select_mode = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -110,5 +119,31 @@ clear_button_enabled = true
 
 [node name="Error" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+
+[node name="PreviewContainer" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/PreviewContainer"]
+layout_mode = 2
+text = "Preview"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/PreviewContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="PreviewTexture" type="TextureRect" parent="ScrollContainer/VBoxContainer/PreviewContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 1
+
+[node name="PreviewLabel" type="Label" parent="ScrollContainer/VBoxContainer/PreviewContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="text_changed" from="ScrollContainer/VBoxContainer/URL" to="." method="_on_repo_url_pasted"]

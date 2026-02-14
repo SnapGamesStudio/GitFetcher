@@ -10,12 +10,13 @@ const TREE_URL := "https://api.github.com/repos/%s/%s/git/trees/%s?recursive=1"
 
 # --- HTTP + download state ---
 var http: HTTPRequest
+var preview_http: HTTPRequest
 var all_files := []          # all files in the repo
 var files_to_download := []  # queue of files to download
 var current_index := 0
 var editor_interface: EditorInterface
 var settings: EditorSettings
-
+var preview_path:String
 
 # --- UI elements (set up in scene) ---
 @onready var error_label: Label = $ScrollContainer/VBoxContainer/Error
@@ -28,12 +29,20 @@ var settings: EditorSettings
 @onready var refresh_button: Button = $ScrollContainer/VBoxContainer/HBoxContainer/RefreshButton
 @onready var download_button: Button = $ScrollContainer/VBoxContainer/DownloadButton
 @onready var download_all_button: Button = $ScrollContainer/VBoxContainer/DownloadAllButton
-@onready var token_button: CheckButton = $ScrollContainer/VBoxContainer/HBoxContainer2/TokenButton 
+@onready var token_button: CheckButton = $ScrollContainer/VBoxContainer/HBoxContainer2/TokenButton
+@onready var preview_button: CheckButton = $ScrollContainer/VBoxContainer/HBoxContainer2/Preview
+@onready var preview_rect: TextureRect = $ScrollContainer/VBoxContainer/PreviewContainer/HBoxContainer/PreviewTexture
+@onready var preview_label: Label = $ScrollContainer/VBoxContainer/PreviewContainer/PreviewLabel
+@onready var search_box: LineEdit = $ScrollContainer/VBoxContainer/SearchBar
+@onready var preview_container: VBoxContainer = $ScrollContainer/VBoxContainer/PreviewContainer
 
 func set_editor_interface(ei: EditorInterface) -> void:
 	editor_interface = ei
 	
 func _toggle_token(toggled_on:bool) -> void:
+	token_edit.visible = toggled_on
+	
+func _preview_setting_changed(toggled_on:bool) -> void:
 	token_edit.visible = toggled_on
 	
 func token_changed(new_token:String) -> void:
@@ -65,6 +74,10 @@ func _ready() -> void:
 	branch_edit.text_changed.connect(branch_changed)
 	repo_edit.text_changed.connect(repo_changed)
 	
+	preview_http = HTTPRequest.new()
+	add_child(preview_http)
+	preview_http.request_completed.connect(_on_preview_downloaded)
+	
 	http = HTTPRequest.new()
 	add_child(http)
 	http.request_completed.connect(_on_request_completed)
@@ -74,13 +87,89 @@ func _ready() -> void:
 	refresh_button.pressed.connect(_refresh_file_list)
 	download_button.pressed.connect(_download_selected_files)
 	download_all_button.pressed.connect(_download_all_files)
+	file_list.item_selected.connect(file_selected)
+	search_box.text_changed.connect(_on_search_changed)
 	
 	download_button.disabled = true
 	download_all_button.disabled = true
+	
+func _on_search_changed(text: String) -> void:
+	file_list.clear()
+	
+	var query := text.strip_edges().to_lower()
+	
+	for path in all_files:
+		if query == "" or query in path.to_lower():
+			file_list.add_item(path, _get_icon_for_file(path))
 
+	
+func file_selected(index: int):
+	error_label.text = ""
+	preview_label.visible = false
+	preview_rect.visible = false
+	preview_rect.texture = null
+	preview_container.visible = false
+	
+	if preview_button.button_pressed:
+		var path = file_list.get_item_text(index)
+		preview_path = path
+		var ext = path.get_extension()
+
+		if ext in ["png","jpg","jpeg","webp","ttf","otf"]:
+			var url = "https://raw.githubusercontent.com/%s/%s/%s/%s" % [OWNER, REPO, BRANCH, path]
+			preview_http.request(url)
+
+
+func _on_preview_downloaded(result, code, headers, body):
+	
+	if code != 200:
+		error_label.text = "Cant Load Preview"
+		return
+	
+	var ext = preview_path.get_extension().to_lower()
+	
+	if ext in ["png","jpg","jpeg","webp"]:
+		var img = Image.new()
+		var success := false
+
+		match ext:
+			"png":
+				success = img.load_png_from_buffer(body) == OK
+			"jpg", "jpeg":
+				success = img.load_jpg_from_buffer(body) == OK
+			"webp":
+				success = img.load_webp_from_buffer(body) == OK
+
+		if not success:
+			print("Failed to load image:", preview_path)
+			return
+		
+		preview_rect.texture = ImageTexture.create_from_image(img)
+		
+		preview_rect.visible = true
+		preview_container.visible = true
+
+	elif ext in ["ttf","otf"]:
+		var temp_path = "user://temp_font." + ext
+		var f = FileAccess.open(temp_path, FileAccess.WRITE)
+		f.store_buffer(body)
+		
+		print("text file")
+		f.close()
+
+		var font = FontFile.new()
+		font.load_dynamic_font(temp_path)
+
+		preview_label.visible = true
+		preview_label.text = "The quick brown fox jumps over the lazy dog\n1234567890"
+		preview_label.add_theme_font_override("font", font)
+		preview_container.visible = true
+		error_label.text = ""
+		
 func _clear_file_list() -> void:
 	all_files.clear()
 	file_list.clear()
+	preview_container.visible = false
 
 func _parse_github_url(url: String) -> Dictionary:
 	var result := {
@@ -146,7 +235,7 @@ func _on_repo_url_pasted(text: String):
 func _refresh_file_list() -> void:
 	all_files.clear()
 	if BRANCH == "" or REPO == "" or OWNER == "":
-		error_label.text = str("ERROR: EITHER NO BRANCH OR REPO OR OWNER FILLED")
+		error_label.text = str("Invaild Repo Details")
 		return
 	else:
 		error_label.text = ""
@@ -197,9 +286,19 @@ func _parse_tree(json_text: String) -> void:
 				continue
 				
 			all_files.append(path)
-			file_list.add_item(path)
-			
+			#file_list.add_item(path,_get_icon_for_file(path))
+	_on_search_changed(search_box.text)
 	
+func _get_icon_for_file(path:String) -> Texture2D:
+	var ext = path.get_extension().to_lower()
+
+	if ext in ["png","jpg","jpeg","webp"]:
+		return get_theme_icon("ImageTexture", "EditorIcons")
+
+	if ext in ["ttf","otf"]:
+		return get_theme_icon("FontFile", "EditorIcons")
+
+	return get_theme_icon("File", "EditorIcons")
 	
 	print("Files found:", all_files)
 	
